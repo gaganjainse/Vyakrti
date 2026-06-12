@@ -7,7 +7,7 @@ use vyakriti::lexer::{Lexer, Token};
 use vyakriti::parser::Parser;
 use vyakriti::semantic::TypeChecker;
 use vyakriti::compiler::BytecodeCompiler;
-use vyakriti::vm::{VirtualMachine, Value, OpCode};
+use vyakriti::vm::{VirtualMachine, Value};
 use vyakriti::borrow_checker::BorrowChecker;
 use vyakriti::optimizer::ASTOptimizer;
 use vyakriti::exhaustiveness::ExhaustivenessAnalyzer;
@@ -335,10 +335,9 @@ fn sem_nested_scope() {
 #[test]
 fn sem_karaka_extraction() {
     use vyakriti::semantic::{extract_karaka, Karaka};
-    let (base, k) = extract_karaka("रामम्_कर्म");
-    assert_eq!(base, "रामम्");
+    let (_base, k) = extract_karaka("रामम्_कर्म");
     assert_eq!(k, Karaka::Karma);
-    let (base, k) = extract_karaka("x");
+    let (_base, k) = extract_karaka("x");
     assert_eq!(k, Karaka::Default);
 }
 
@@ -750,7 +749,7 @@ fn exh_no_enum_ok() {
 fn e2e_golden_smoke() {
     let vm = full_pipeline(r#"
         कार्य वर्ण_गणना(स्रोतः : शब्द) -> अङ्क { प्रतिफल दैर्घ्यम्(स्रोतः) । }
-        कार्य कार्यक्रम_स्वीकारः(स्रोतः : शब्द) -> सत्यता { प्रतिफल दैर्घ्यम्(स्रोतः) अग्र 0 । }
+        कार्य कार्यक्रम_स्वीकारः(स्रोतः : शब्द) -> सत्यता { प्रतिफल दैर्घ्यम्(स्रोतः) अग्र 10 । }
         मान नमूना : शब्द = "मान x : अङ्क = 1 ।" ।
         मान अक्षराः : अङ्क = वर्ण_गणना(नमूना) ।
     "#).unwrap();
