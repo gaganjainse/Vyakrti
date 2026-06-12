@@ -1,0 +1,6 @@
+[workspace]
+members = [
+    "vyakrti-language",
+    "vyakrti-ide/backend",
+]
+resolver = "2"
