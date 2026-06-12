@@ -51,7 +51,10 @@ fn workspace_root() -> PathBuf {
 }
 
 fn normalize_relative(path: &str) -> Result<PathBuf, String> {
-    let raw = Path::new(path);
+    // Normalize backslashes to forward slashes for consistent cross-platform handling
+    let normalized_path = path.replace('\\', "/");
+    let raw = Path::new(&normalized_path);
+    
     if raw.is_absolute() {
         return Err("absolute paths are not allowed".into());
     }
