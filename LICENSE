@@ -186,7 +186,7 @@
       same "printed page" as the copyright notice for easier
       identification within third-party archives.
 
-   Copyright (c) 2026 gaganjainse
+   Copyright [2026] [Gagan Jain]
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -199,3 +199,21 @@
    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
    See the License for the specific language governing permissions and
    limitations under the License.
+
+---
+
+   EXTENSION NOTICE — .vya File Format
+
+   The .vya file extension is used exclusively by the Vyākṛti programming
+   language to denote source code files written in Vyākṛti syntax. All .vya
+   files are subject to this Apache License 2.0 and include the copyright
+   notice of Gagan Jain (2026) and contributors.
+
+   While the Apache License 2.0 permits derivative works and modification,
+   the exclusive use of the .vya extension for Vyākṛti source files is
+   intended as the canonical format for this language. Any derivative work
+   or fork of the Vyākṛti language should use a distinct file extension
+   to avoid confusion with the official Vyākṛti specification.
+
+   For details on the .vya file format, syntax rules, and licensing of
+   Vyākṛti programs, see the project README and BRANDING documents.
