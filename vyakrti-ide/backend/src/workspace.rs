@@ -153,9 +153,21 @@ mod tests {
 
     #[test]
     fn rejects_paths_outside_workspace() {
+        // Unix-style parent directory reference
         assert!(normalize_relative("../secret.vya").is_err());
+        
+        // Windows-style parent directory reference (single backslash in string literal)
+        // In Rust: "..\\secret.vya" becomes ../secret.vya at runtime
         assert!(normalize_relative("..\\secret.vya").is_err());
+        
+        // Absolute Windows path (C:\...)
         assert!(normalize_relative("C:\\secret.vya").is_err());
+        
+        // Explicit test with actual backslash characters (escaped as \\\\)
+        // "..\\\\secret.vya" becomes ..\secret.vya at runtime
+        let backslash_parent_ref = "..\\secret.vya";
+        assert!(normalize_relative(backslash_parent_ref).is_err(), 
+                "Should reject parent directory reference with backslashes");
     }
 
     #[test]
