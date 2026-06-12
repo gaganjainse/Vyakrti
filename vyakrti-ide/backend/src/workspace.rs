@@ -60,6 +60,9 @@ fn normalize_relative(path: &str) -> Result<PathBuf, String> {
         match part {
             std::path::Component::Normal(p) => clean.push(p),
             std::path::Component::CurDir => {}
+            std::path::Component::ParentDir => {
+                return Err("path must stay inside the workspace".into());
+            }
             _ => return Err("path must stay inside the workspace".into()),
         }
     }
