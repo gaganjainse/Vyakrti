@@ -1,0 +1,88 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --ide-bg: #f8f9fa;
+    --ide-panel: #ffffff;
+    --ide-border: #dee2e6;
+    --ide-text: #212529;
+    --ide-accent: #4361ee;
+    --ide-error: #e63946;
+    --ide-success: #2d6a4f;
+    --ide-warning: #e9c46a;
+    --ide-muted: #6c757d;
+    --ide-surface: #e9ecef;
+    --ide-hover: #e2e6ea;
+    --ide-active: #d3d7db;
+    --ide-scrollbar: #c0c4cc;
+    --ide-scrollbar-hover: #a8adb5;
+    --ide-overlay: rgba(0, 0, 0, 0.4);
+  }
+
+  .dark {
+    --ide-bg: #181825;
+    --ide-panel: #1e1e2e;
+    --ide-border: #313244;
+    --ide-text: #cdd6f4;
+    --ide-accent: #89b4fa;
+    --ide-error: #f38ba8;
+    --ide-success: #a6e3a1;
+    --ide-warning: #f9e2af;
+    --ide-muted: #6c7086;
+    --ide-surface: #11111b;
+    --ide-hover: #2a2a3c;
+    --ide-active: #252538;
+    --ide-scrollbar: #313244;
+    --ide-scrollbar-hover: #45475a;
+    --ide-overlay: rgba(0, 0, 0, 0.6);
+  }
+
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: var(--ide-scrollbar) transparent;
+  }
+
+  *::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  *::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  *::-webkit-scrollbar-thumb {
+    background-color: var(--ide-scrollbar);
+    border-radius: 3px;
+  }
+
+  *::-webkit-scrollbar-thumb:hover {
+    background-color: var(--ide-scrollbar-hover);
+  }
+
+  ::selection {
+    background-color: color-mix(in srgb, var(--ide-accent) 30%, transparent);
+  }
+
+  body {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+}
+
+@layer components {
+  .panel-header {
+    @apply px-4 py-2 text-xs font-semibold text-ide-muted uppercase tracking-wider flex items-center gap-2 border-b border-ide-border;
+  }
+
+  .toolbar-btn {
+    @apply p-1.5 hover:bg-ide-hover text-ide-muted hover:text-ide-text rounded transition-colors;
+  }
+
+  .ide-input {
+    @apply bg-ide-surface text-sm text-ide-text px-3 py-2 border border-ide-border rounded focus:outline-none focus:border-ide-accent font-mono transition-colors;
+  }
+}

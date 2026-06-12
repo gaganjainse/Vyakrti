@@ -1,0 +1,44 @@
+# ============================================
+# Vyākṛti — Root .gitignore
+# ============================================
+
+# --- OS files ---
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# --- Editor / IDE ---
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# --- Environment ---
+.env
+.env.local
+.env.*.local
+
+# --- Rust (vyakrti-language + vyakrti-ide/backend) ---
+target/
+Cargo.lock
+**/*.rs.bk
+*.pdb
+*.exe
+
+# --- Node / Frontend (vyakrti-ide/frontend) ---
+node_modules/
+dist/
+build/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# --- General ---
+*.bak
+*.tmp
+*.temp
+.cache/
+__pycache__/
+*.pyc

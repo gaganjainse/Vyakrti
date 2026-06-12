@@ -1,0 +1,17 @@
+# Vyākṛti Language — .gitignore
+
+# --- Rust ---
+target/
+Cargo.lock
+**/*.rs.bk
+*.pdb
+*.exe
+
+# --- Editor ---
+.vscode/
+.idea/
+*.swp
+
+# --- OS ---
+.DS_Store
+Thumbs.db

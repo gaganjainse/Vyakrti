@@ -1,0 +1,59 @@
+// tantram.vya — Vyākṛti language integration test
+// Exercises core pipeline features with pure Devanagari syntax
+
+// 1. Variables with type annotation and constant folding
+मान x : अङ्क = 42 ।
+मान y = 10 + 20 * 2 ।
+मान z = 60 * 60 * 24 ।
+मान folded = 100 * 200 ।
+
+// 2. Booleans and comparisons
+मान b = सत ।
+मान c = 5 < 10 ।
+मान d = 10 == 10 ।
+
+// 3. String literals
+मान s = "नमस्ते व्याकृति" ।
+
+// 4. Print builtin
+मुद्रण(x) ।
+मुद्रण(y) ।
+मुद्रण(z) ।
+मुद्रण(s) ।
+मुद्रण(b) ।
+
+// 5. If-else control flow
+यदि सत तर्हि {
+    मुद्रण("if branch ok") ।
+} अन्यथा {
+    मुद्रण("else branch") ।
+}
+
+// 6. Struct declaration
+वस्तु_विन्यासः बिन्दुः {
+    x : अङ्क,
+    y : अङ्क
+}
+
+// 7. Enum declaration
+रूपभेदः दिशा {
+    उत्तर,
+    दक्षिण,
+    पूर्व,
+    पश्चिम
+}
+
+// 8. Trait declaration
+गुणधर्म प्रदर्शनम् {
+    कार्य विवरणम्() -> शब्द ।
+}
+
+// 9. Borrow expression
+मान val : अङ्क = 100 ।
+
+// 10. String utility builtins
+मान greeting = "hello" ।
+दैर्घ्यम्(greeting) ।
+
+// 11. Type correctness
+मान typed : अङ्क = 99 ।
