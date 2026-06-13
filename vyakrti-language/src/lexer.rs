@@ -266,9 +266,19 @@ impl Lexer {
             }
         }
         let token = if is_float {
-            Token::Literal(crate::vm::Value::Float(text.parse::<f64>().unwrap_or(0.0)))
+            Token::Literal(crate::vm::Value::Float(
+                text.parse::<f64>().unwrap_or_else(|_| {
+                    eprintln!("Warning: Invalid float literal at {}:{}: '{}'", line, col, text);
+                    0.0
+                })
+            ))
         } else {
-            Token::IntLiteral(text.parse::<i64>().unwrap_or(0))
+            Token::IntLiteral(
+                text.parse::<i64>().unwrap_or_else(|_| {
+                    eprintln!("Warning: Invalid integer literal at {}:{}: '{}'", line, col, text);
+                    0
+                })
+            )
         };
         SpannedToken { token, line, col }
     }

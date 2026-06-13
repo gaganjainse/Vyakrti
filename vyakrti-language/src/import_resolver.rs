@@ -46,7 +46,7 @@ pub fn resolve_imports(
                     .map_err(|e| format!("parse error in import '{}': {}", import_path.display(), e))?;
 
                 // Recursively resolve imports in the imported file
-                let import_dir = import_path.parent().unwrap_or(base_dir);
+                let import_dir = import_path.parent().unwrap_or_else(|| base_dir);
                 let nested = resolve_imports(&imported_ast, import_dir, workspace_root)?;
                 resolved.extend(nested);
             }
@@ -79,7 +79,7 @@ fn resolve_import_path(
 
     // Resolve relative to the importing file's directory
     let resolved = base_dir.join(path);
-    let resolved = resolved.canonicalize().unwrap_or(resolved);
+    let resolved = resolved.canonicalize().unwrap_or_else(|_| resolved);
 
     // Ensure the resolved path is within the workspace root
     let root = workspace_root.canonicalize().unwrap_or_else(|_| workspace_root.to_path_buf());

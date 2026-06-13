@@ -16,7 +16,7 @@ impl MacroExpander {
         MacroExpander { macro_registry: HashMap::new() }
     }
 
-    pub fn expand_program(&mut self, nodes: Vec<ASTNode>) -> Vec<ASTNode> {
+    pub fn expand_program(&mut self, nodes: Vec<ASTNode>) -> Result<Vec<ASTNode>, String> {
         let mut expanded_nodes = Vec::new();
         for node in nodes {
             match node {
@@ -24,13 +24,13 @@ impl MacroExpander {
                     self.macro_registry.insert(name, (params, body));
                 }
                 ASTNode::MacroCall { name, args } => {
-                    let mut expanded_exprs = self.expand_macro_call(&name, &args);
+                    let mut expanded_exprs = self.expand_macro_call(&name, &args)?;
                     expanded_nodes.append(&mut expanded_exprs);
                 }
                 _ => expanded_nodes.push(self.expand_node(node)),
             }
         }
-        expanded_nodes
+        Ok(expanded_nodes)
     }
 
     fn expand_node(&mut self, node: ASTNode) -> ASTNode {
@@ -51,15 +51,15 @@ impl MacroExpander {
         }
     }
 
-    fn expand_macro_call(&self, name: &str, args: &[Expression]) -> Vec<ASTNode> {
+    fn expand_macro_call(&self, name: &str, args: &[Expression]) -> Result<Vec<ASTNode>, String> {
         if let Some((params, template_body)) = self.macro_registry.get(name) {
             let mut substitution_map = HashMap::new();
             for (param, arg) in params.iter().zip(args.iter()) {
                 substitution_map.insert(param.clone(), arg.clone());
             }
-            template_body.iter().map(|node| self.substitute_node(node.clone(), &substitution_map)).collect()
+            Ok(template_body.iter().map(|node| self.substitute_node(node.clone(), &substitution_map)).collect())
         } else {
-            panic!("Compile-Time Macro Error: Attempted to invoke unregistered macro variant '{}!'.", name);
+            Err(format!("Compile-Time Macro Error: Attempted to invoke unregistered macro variant '{}!'.", name))
         }
     }
 
@@ -76,7 +76,7 @@ impl MacroExpander {
 
     fn substitute_expr(&self, expr: Expression, map: &HashMap<String, Expression>) -> Expression {
         match expr {
-            Expression::Variable(name) => map.get(&name).cloned().unwrap_or(Expression::Variable(name)),
+            Expression::Variable(name) => map.get(&name).cloned().unwrap_or_else(|| Expression::Variable(name)),
             Expression::Binary { left, op, right } => Expression::Binary {
                 left: Box::new(self.substitute_expr(*left, map)),
                 op,

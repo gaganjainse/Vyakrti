@@ -12,7 +12,7 @@ impl Default for JitCompiler {
 impl JitCompiler {
     pub fn new() -> Self { JitCompiler }
 
-    pub fn compile_function(&mut self, body: &[ASTNode]) -> ExecutableMemory {
+    pub fn compile_function(&mut self, body: &[ASTNode]) -> Result<ExecutableMemory, String> {
         let mut machine_code: Vec<u8> = Vec::new();
 
         machine_code.extend_from_slice(&[
@@ -33,7 +33,7 @@ impl JitCompiler {
                             machine_code.push(0x48); machine_code.push(0x2D);
                             machine_code.extend_from_slice(&(*val as i32).to_le_bytes());
                         }
-                        _ => panic!("JIT Error: Instruction operation not supported inside runtime bare-metal code generator compilation steps."),
+                        _ => return Err(format!("JIT Error: Instruction operation '{}' not supported inside runtime bare-metal code generator compilation steps.", op)),
                     }
                 }
             }
@@ -44,9 +44,9 @@ impl JitCompiler {
             0xC3,
         ]);
 
-        let mut jit_page = ExecutableMemory::allocate(machine_code.len());
+        let mut jit_page = ExecutableMemory::allocate(machine_code.len())?;
         jit_page.write_bytes(&machine_code);
-        jit_page.seal_and_protect_page();
-        jit_page
+        jit_page.seal_and_protect_page()?;
+        Ok(jit_page)
     }
 }

@@ -6,7 +6,7 @@ pub struct ExecutableMemory {
 }
 
 impl ExecutableMemory {
-    pub fn allocate(size: usize) -> Self {
+    pub fn allocate(size: usize) -> Result<Self, String> {
         let page_size = 4096;
         let aligned_size = (size + page_size - 1) & !(page_size - 1);
         unsafe {
@@ -14,9 +14,11 @@ impl ExecutableMemory {
             {
                 let mut page_ptr: *mut std::ffi::c_void = ptr::null_mut();
                 let res = libc::posix_memalign(&mut page_ptr, page_size, aligned_size);
-                if res != 0 { panic!("System Allocation Fault: Unable to map aligned pages via kernel."); }
+                if res != 0 {
+                    return Err(format!("System Allocation Fault: Unable to map aligned pages via kernel (error code: {})", res));
+                }
                 libc::mprotect(page_ptr, aligned_size, libc::PROT_READ | libc::PROT_WRITE);
-                ExecutableMemory { ptr: page_ptr as *mut u8, size: aligned_size }
+                Ok(ExecutableMemory { ptr: page_ptr as *mut u8, size: aligned_size })
             }
             #[cfg(windows)]
             {
@@ -24,13 +26,13 @@ impl ExecutableMemory {
                     ptr::null_mut(), aligned_size, winapi::um::winnt::MEM_COMMIT, winapi::um::winnt::PAGE_READWRITE
                 );
                 if raw.is_null() {
-                    panic!("System Allocation Fault: Unable to reserve executable virtual memory pages.");
+                    return Err("System Allocation Fault: Unable to reserve executable virtual memory pages.".to_string());
                 }
-                ExecutableMemory { ptr: raw as *mut u8, size: aligned_size }
+                Ok(ExecutableMemory { ptr: raw as *mut u8, size: aligned_size })
             }
             #[cfg(not(any(unix, windows)))]
             {
-                panic!("JIT Memory: Unsupported target platform for executable memory allocation.");
+                Err("JIT Memory: Unsupported target platform for executable memory allocation.".to_string())
             }
         }
     }
@@ -40,7 +42,7 @@ impl ExecutableMemory {
         unsafe { ptr::copy_nonoverlapping(machine_code.as_ptr(), self.ptr, machine_code.len()); }
     }
 
-    pub fn seal_and_protect_page(&self) {
+    pub fn seal_and_protect_page(&self) -> Result<(), String> {
         unsafe {
             #[cfg(unix)]
             { libc::mprotect(self.ptr as *mut std::ffi::c_void, self.size, libc::PROT_READ | libc::PROT_EXEC); }
@@ -51,9 +53,10 @@ impl ExecutableMemory {
                     self.ptr as *mut winapi::ctypes::c_void, self.size, winapi::um::winnt::PAGE_EXECUTE_READ, &mut old
                 );
                 if res == 0 {
-                    panic!("JIT Memory: Failed to seal executable page with read-execute protection.");
+                    return Err("JIT Memory: Failed to seal executable page with read-execute protection.".to_string());
                 }
             }
+            Ok(())
         }
     }
 
