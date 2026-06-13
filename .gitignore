@@ -1,1 +1,35 @@
-Nothing should be ignored since only a Rust source file (.rs) was modified and there are no build artifacts, dependencies, or temp files in the changes.
+```rust
+# Compiled and build artifacts
+*.o
+*.obj
+*.exe
+*.dll
+*.so
+*.a
+*.out
+target/
+
+# Dependencies
+Cargo.lock
+**/target/
+
+# Logs and temp files
+*.log
+*.tmp
+*.swp
+
+# Environment
+.env
+.env.local
+*.env.*
+
+# Editors
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Rust-specific
+**/Cargo.lock
+**/target/
+```
