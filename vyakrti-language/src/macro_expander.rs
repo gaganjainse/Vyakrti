@@ -27,27 +27,40 @@ impl MacroExpander {
                     let mut expanded_exprs = self.expand_macro_call(&name, &args)?;
                     expanded_nodes.append(&mut expanded_exprs);
                 }
-                _ => expanded_nodes.push(self.expand_node(node)),
+                _ => expanded_nodes.push(self.expand_node(node)?),
             }
         }
         Ok(expanded_nodes)
     }
 
-    fn expand_node(&mut self, node: ASTNode) -> ASTNode {
+    fn expand_node(&mut self, node: ASTNode) -> Result<ASTNode, String> {
         match node {
-            ASTNode::IfStmt { condition, then_branch, else_branch } => ASTNode::IfStmt {
-                condition,
-                then_branch: self.expand_program(then_branch),
-                else_branch: else_branch.map(|b| self.expand_program(b)),
-            },
-            ASTNode::WhileStmt { condition, body } => ASTNode::WhileStmt {
-                condition,
-                body: self.expand_program(body),
-            },
-            ASTNode::ReturnStmt(expr) => ASTNode::ReturnStmt(expr),
-            ASTNode::ModuleDecl { name, body } => ASTNode::ModuleDecl { name, body: self.expand_program(body) },
-            ASTNode::ModuleDef { name, body } => ASTNode::ModuleDef { name, body: self.expand_program(body) },
-            _ => node,
+            ASTNode::IfStmt { condition, then_branch, else_branch } => {
+                let expanded_then = self.expand_program(then_branch)?;
+                let expanded_else = else_branch.map(|b| self.expand_program(b)).transpose()?;
+                Ok(ASTNode::IfStmt {
+                    condition,
+                    then_branch: expanded_then,
+                    else_branch: expanded_else,
+                })
+            }
+            ASTNode::WhileStmt { condition, body } => {
+                let expanded_body = self.expand_program(body)?;
+                Ok(ASTNode::WhileStmt {
+                    condition,
+                    body: expanded_body,
+                })
+            }
+            ASTNode::ReturnStmt(expr) => Ok(ASTNode::ReturnStmt(expr)),
+            ASTNode::ModuleDecl { name, body } => {
+                let expanded_body = self.expand_program(body)?;
+                Ok(ASTNode::ModuleDecl { name, body: expanded_body })
+            }
+            ASTNode::ModuleDef { name, body } => {
+                let expanded_body = self.expand_program(body)?;
+                Ok(ASTNode::ModuleDef { name, body: expanded_body })
+            }
+            _ => Ok(node),
         }
     }
 
