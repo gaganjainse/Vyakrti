@@ -27,7 +27,7 @@ fn run_pipeline(source: &str, disasm: bool) -> Result<(), String> {
         .map_err(|errors| format!("Semantic errors:\n  {}", errors.join("\n  ")))?;
 
     let mut macro_engine = MacroExpander::new();
-    let macro_ast = macro_engine.expand_program(checked_ast);
+    let macro_ast = macro_engine.expand_program(checked_ast)?;
 
     let mut derive_engine = DeriveProcessor::new();
     let derived_ast = derive_engine.expand_attributes(macro_ast);
