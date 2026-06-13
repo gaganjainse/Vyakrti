@@ -2,9 +2,9 @@
 
 > **A working MVP for a Sanskrit-oriented programming language with a compiler, bytecode VM, CLI, and web-based IDE.**
 
-Vyākṛti (Sanskrit: व्याकृतिः, "structured form") is an experimental programming language that uses Devanagari script and Sanskrit-derived keywords as its syntax. This repository contains the full language implementation, CLI tools, and a web-based IDE.
+Vyākṛti (Sanskrit: व्याकृतिः, "structured form") is an experimental programming language that uses Devanagari script and Sanskrit-derived keywords as its syntax. This repository contains the entire project: the language compiler/VM library, a CLI tool, and a React-based web IDE with Monaco editor integration.
 
-**Current status:** Working MVP. The language compiles and runs. The web IDE has a complete UI. Frontend and backend run separately. No auth, no database, no AI layer yet.
+**Current status:** Working MVP. The language compiles and runs. The web IDE has a complete UI with compile, REPL, file management, and diagnostics. Frontend and backend run separately. No auth, no database, no AI layer yet.
 
 ---
 
@@ -17,8 +17,9 @@ Vyākṛti (Sanskrit: व्याकृतिः, "structured form") is an expe
 - [Quick Start](#quick-start)
 - [What Works](#what-works)
 - [What's Not Done Yet](#whats-not-done-yet)
-- [.vya File Format](#vya-file-format)
 - [Screenshots](#screenshots)
+- [Language Example](#language-example)
+- [Project Background](#project-background)
 - [License](#license)
 
 ---
@@ -36,9 +37,9 @@ Vyākṛti (Sanskrit: व्याकृतिः, "structured form") is an expe
 ## Architecture
 
 ```
-┌────────────────────────────────────────────────────────────────┐
+┌─────────────────────────────────────────────────────────────────┐
 │                        Vyākṛti Project                          │
-├────────────────────────────────────────────────────────────────┤
+├─────────────────────────────────────────────────────────────────┤
 │                                                                 │
 │  ┌──────────────────────────────────────────────────────────┐   │
 │  │              vyakrti-language/ (Core)                     │   │
@@ -72,7 +73,7 @@ Vyākṛti (Sanskrit: व्याकृतिः, "structured form") is an expe
 │  │                         └─────────────────────────────┘  │   │
 │  └──────────────────────────────────────────────────────────┘   │
 │                                                                 │
-└────────────────────────────────────────────────────────────────┘
+└─────────────────────────────────────────────────────────────────┘
 ```
 
 ### Compiler Pipeline
@@ -103,8 +104,6 @@ Virtual Machine ──→ Execution (stack-based, with builtins)
 ```
 Vyakrti/
 ├── README.md                   ← You are here
-├── LICENSE                     ← Apache 2.0 license + .vya extension notice
-├── BRANDING.md                 ← Trademark and .vya file extension policy
 ├── .gitignore
 │
 ├── vyakrti-language/           ← Core language library + CLI
@@ -169,7 +168,7 @@ Vyakrti/
 ## Tech Stack
 
 | Layer | Technology |
-|-------|----------|
+|-------|-----------|
 | Language Core | Rust |
 | CLI | Rust binary |
 | IDE Backend | Rust (axum, tokio, serde) |
@@ -192,7 +191,7 @@ Vyakrti/
 ### 1. Clone
 
 ```bash
-git clone https://github.com/yourusername/Vyakrti.git
+git clone https://github.com/gaganjainse/Vyakrti.git
 cd Vyakrti
 ```
 
@@ -279,53 +278,21 @@ Honest list of current limitations:
 
 ---
 
-## .vya File Format
+## Screenshots
 
-### What is a .vya File?
-
-A `.vya` file is a plain-text source code file written in the **Vyākṛti programming language**. The `.vya` extension is reserved exclusively for Vyākṛti source code.
-
-### File Structure
-
-```vyakriti
-// Copyright and license notice (optional but recommended)
-// Copyright [YEAR] [AUTHOR]
-// Licensed under the Apache License, Version 2.0
-
-// Variable declarations
-मान परिणामः : अङ्क = १० ।
-
-// Function definitions
-कार्य योगः(क : अङ्क, ख : अङ्क) -> अङ्क {
-    प्रतिफल क + ख ।
-}
-
-// Conditionals, loops, pattern matching, etc.
-यदि (परिणामः > ५) तर्हि {
-    मुद्रण(परिणामः) ।
-}
-```
-
-### Licensing .vya Files
-
-All `.vya` files in this project are licensed under the **Apache License 2.0**. See [LICENSE](LICENSE) for full terms.
-
-When creating new `.vya` files, include a copyright notice:
-
-```vyakriti
-// Vyākṛti Source Code
-// Copyright 2026 Gagan Jain
-// Licensed under the Apache License, Version 2.0
-```
-
-### Using .vya in Derivatives
-
-If you create a fork or variant of Vyākṛti with non-standard syntax extensions, please use a **different file extension** to avoid confusion with official `.vya` files. See [BRANDING.md](BRANDING.md) for guidelines.
-
-Examples:
-- `.vyax` for extended syntax
-- `.vya-plus` for experimental features
-- `.custom-vya` for project-specific dialects
+> ⚠️ **Screenshots needed.** The IDE is fully functional but the repo currently lacks screenshots.
+>
+> To capture:
+> 1. Start the IDE (see Quick Start above)
+> 2. Open a `.vya` file in the editor
+> 3. Save screenshots to `screenshots/` directory
+>
+> Suggested captures:
+> - `ide-editor.png` — Editor with Devanagari syntax highlighting
+> - `ide-compile-output.png` — Compile output showing AST/bytecode/diagnostics
+> - `ide-repl.png` — WebSocket REPL session
+> - `ide-settings.png` — Settings panel with theme toggle
+> - `ide-project-explorer.png` — Project explorer sidebar with file tree
 
 ---
 
@@ -349,7 +316,7 @@ Examples:
 ### Keywords
 
 | Vyākṛti | English | Vyākṛti | English |
-|----------|---------|----------|----------|
+|----------|---------|----------|---------|
 | मान | var | कार्य | function |
 | प्रतिफल | return | मुद्रण | print (builtin) |
 | यदि | if | तर्हि | then |
@@ -362,27 +329,21 @@ Examples:
 
 ---
 
-## Screenshots
+## Project Background
 
-See the [`screenshots/`](screenshots/) directory for IDE screenshots.
+Vyākṛti was built as an exploration of programming language design, compiler architecture, and developer tooling. The goal was to build a complete pipeline — from lexer to VM — for a language with a non-Latin syntax, and to wrap it in a real web-based IDE.
 
-To capture your own:
-1. Start the IDE (see Quick Start)
-2. Open a `.vya` file in the editor
-3. Save screenshots to `screenshots/`
+The name means "structured form" in Sanskrit. The language uses Devanagari script for all keywords and supports both Devanagari and Latin identifiers.
 
-Suggested captures:
-- `ide-editor.png` — Editor with syntax highlighting
-- `ide-compile-output.png` — Compile output with AST/bytecode
-- `ide-repl.png` — WebSocket REPL session
-- `ide-settings.png` — Settings panel
+**What makes this project unusual:**
+- A fully working compiler pipeline (lex → parse → type-check → compile → execute) built from scratch
+- Unicode-aware lexer handling Devanagari script and danda (।) statement terminators
+- Kāraka-driven semantic analysis (using Sanskrit grammatical concepts for variable scoping)
+- Self-hosting test corpus — the language can parse its own source
+- A real web IDE with Monaco Editor integration, not just a code snippet
 
 ---
 
 ## License
 
-This project is licensed under the **Apache License 2.0**. See the [LICENSE](LICENSE) file for full terms.
-
-The `.vya` file extension is reserved for Vyākṛti source code. See [BRANDING.md](BRANDING.md) for trademark and extension policy details.
-
-Copyright © 2026 Gagan Jain
+This project is an experimental prototype under active development.
