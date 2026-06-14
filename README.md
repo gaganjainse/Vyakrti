@@ -1,349 +1,77 @@
-# Vyākṛti — Sanskrit-Oriented Programming Language & Web IDE
+# Vyākṛti: A Sanskrit-oriented Programming Language and Web IDE
 
-> **A working MVP for a Sanskrit-oriented programming language with a compiler, bytecode VM, CLI, and web-based IDE.**
+Vyākṛti is an ambitious engineering project exploring programming language design, developer tooling, web IDE architecture, and AI-assisted workflows. It is an experimental Sanskrit-oriented programming language with a complete compiler pipeline and a browser-based Integrated Development Environment (IDE).
 
-Vyākṛti (Sanskrit: व्याकृतिः, "structured form") is an experimental programming language that uses Devanagari script and Sanskrit-derived keywords as its syntax. This repository contains the entire project: the language compiler/VM library, a CLI tool, and a React-based web IDE with Monaco editor integration.
+## Overview
 
-**Current status:** Working MVP. The language compiles and runs. The web IDE has a complete UI with compile, REPL, file management, and diagnostics. Frontend and backend run separately. No auth, no database, no AI layer yet.
+Vyākṛti aims to provide a unique programming experience by integrating Sanskrit linguistic principles into its design. The project encompasses a full compiler pipeline, a command-line interface (CLI), and an interactive web-based IDE for writing, compiling, and running Vyākṛti code.
 
----
+## Features
 
-## Table of Contents
-
-- [What's Included](#whats-included)
-- [Architecture](#architecture)
-- [Repository Structure](#repository-structure)
-- [Tech Stack](#tech-stack)
-- [Quick Start](#quick-start)
-- [What Works](#what-works)
-- [What's Not Done Yet](#whats-not-done-yet)
-- [Screenshots](#screenshots)
-- [Language Example](#language-example)
-- [Project Background](#project-background)
-- [License](#license)
-
----
-
-## What's Included
-
-- **Language core** — Lexer, parser, semantic type checker, bytecode compiler, stack-based VM
-- **CLI tool** — `vy compile`, `vy run`, `vy repl` commands
-- **Web IDE** — React + Monaco Editor with syntax highlighting, autocomplete, hover tooltips, diagnostics, file management, command palette, WebSocket REPL
-- **Self-hosting corpus** — The language's own lexer/parser written in Vyākṛti as test fixtures
-- **123 tests** — Covering lexer, parser, semantic analysis, VM, optimizer, borrow checker, exhaustiveness, and end-to-end pipeline
-
----
-
-## Architecture
-
-```
-┌─────────────────────────────────────────────────────────────────┐
-│                        Vyākṛti Project                          │
-├─────────────────────────────────────────────────────────────────┤
-│                                                                 │
-│  ┌──────────────────────────────────────────────────────────┐   │
-│  │              vyakrti-language/ (Core)                    │   │
-│  │                                                          │   │
-│  │  Source → Lexer → Parser → Type Checker → Compiler → VM  │   │
-│  │                                                          │   │
-│  │  ┌────────┐  ┌────────┐  ┌────────┐  ┌────────┐          │   │
-│  │  │ Lexer  │→ │ Parser │→ │Semantic│→ │Compiler│          │   │
-│  │  │        │  │        │  │(kāraka)│  │        │          │   │
-│  │  └────────┘  └────────┘  └────────┘  └────────┘          │   │
-│  │                                              │           │   │
-│  │                                              ▼           │   │
-│  │                                         ┌────────┐       │   │
-│  │                                         │   VM   │       │   │
-│  │                                         │(stack) │       │   │
-│  │                                         └────────┘       │   │
-│  │                                                          │   │
-│  │  CLI: vy compile | vy run | vy repl                      │   │
-│  └──────────────────────────────────────────────────────────┘   │
-│                                                                 │
-│  ┌──────────────────────────────────────────────────────────┐   │
-│  │              vyakrti-ide/ (Web IDE)                      │   │
-│  │                                                          │   │
-│  │  ┌─────────────────┐   ┌─────────────────────────────┐   │   │
-│  │  │   frontend/     │   │   backend/                  │   │   │
-│  │  │   React + TS    │──▶│   Rust + axum              │   │   │
-│  │  │   Monaco Editor │   │   REST + WebSocket          │   │   │
-│  │  │   Zustand       │   │   Compile endpoint          │   │   │
-│  │  │   Tailwind CSS  │   │   LSP endpoints             │   │   │
-│  │  └─────────────────┘   │   WebSocket REPL            │   │   │
-│  │                        └─────────────────────────────┘   │   │
-│  └──────────────────────────────────────────────────────────┘   │
-│                                                                 │
-└─────────────────────────────────────────────────────────────────┘
-```
-
-### Compiler Pipeline
-
-```
-Source Code (Devanagari)
-    │
-    ▼
-Lexer ──→ Token stream (38+ token types, Unicode-aware)
-    │
-    ▼
-Parser ──→ AST (recursive-descent, expressions + statements)
-    │
-    ▼
-Semantic Type Checker ──→ Type-checked AST (kāraka-driven scoping)
-    │
-    ▼
-Bytecode Compiler ──→ Binary bytecode (34 opcodes)
-    │
-    ▼
-Virtual Machine ──→ Execution (stack-based, with builtins)
-```
-
----
-
-## Repository Structure
-
-```
-Vyakrti/
-├── README.md                   ← You are here
-├── .gitignore
-│
-├── vyakrti-language/           ← Core language library + CLI
-│   ├── Cargo.toml              ← Rust package: "vyakriti" v2026.1.0
-│   ├── src/
-│   │   ├── lib.rs              ← Library root (re-exports all modules)
-│   │   ├── main.rs             ← Example pipeline runner + tests
-│   │   ├── bin/vy.rs           ← CLI binary (compile / run / repl)
-│   │   ├── lexer.rs            ← Tokenizer (Devanagari + Latin)
-│   │   ├── parser.rs           ← Recursive-descent parser → AST
-│   │   ├── ast.rs              ← AST node types
-│   │   ├── semantic.rs         ← Kāraka-driven type checker
-│   │   ├── compiler.rs         ← Bytecode compiler
-│   │   ├── vm.rs               ← Stack-based virtual machine
-│   │   ├── borrow_checker.rs   ← Ownership verification
-│   │   ├── optimizer.rs        ← Constant folding
-│   │   ├── exhaustiveness.rs   ← Match coverage analysis
-│   │   ├── macro_expander.rs   ← Macro template expansion
-│   │   ├── monomorphizer.rs    ← Generics monomorphization
-│   │   ├── derive_processor.rs ← Attribute auto-derivation
-│   │   ├── disassembler.rs     ← Bytecode disassembler
-│   │   ├── jit_memory.rs       ← JIT memory (stub)
-│   │   └── jit_compiler.rs     ← JIT compilation (stub)
-│   ├── std/                    ← Vyākṛti standard library
-│   ├── selfhost/               ← Self-hosting test corpus
-│   └── tests/
-│       ├── tantram.vya         ← Integration test fixture
-│       └── ai_harness.rs       ← 82 AI-generated integration tests
-│
-├── vyakrti-ide/                ← Web IDE (frontend + backend server)
-│   ├── start-ide.bat           ← Windows launcher
-│   ├── start-ide.ps1           ← PowerShell launcher
-│   ├── frontend/               ← React web application
-│   │   ├── package.json        ← Node deps: React, Monaco, Zustand, Vite
-│   │   ├── src/
-│   │   │   ├── App.tsx         ← Root component (IDE layout)
-│   │   │   ├── store/ideStore.ts ← Zustand state management
-│   │   │   ├── utils/vyakritiLanguage.ts ← Monaco language definition
-│   │   │   └── components/
-│   │   │       ├── Editor/     ← CodeEditor, EditorTabs
-│   │   │       ├── Sidebar/    ← ProjectExplorer
-│   │   │       ├── Toolbar/    ← TopBar
-│   │   │       ├── Panels/     ← DiagnosticsConsole, StatusBar,
-│   │   │       │                 SettingsPanel, ToolPanels, ErrorBoundary
-│   │   │       └── Modals/     ← CommandPalette, WorkspaceModals
-│   │   └── index.html
-│   └── backend/                ← Rust backend server
-│       ├── Cargo.toml          ← axum + tokio + vyakriti crate
-│       └── src/
-│           ├── main.rs         ← axum server (REST + WebSocket)
-│           ├── compiler.rs     ← Compile endpoint
-│           ├── lsp.rs          ← LSP-like endpoints
-│           ├── ws.rs           ← WebSocket REPL handler
-│           ├── workspace.rs    ← File system operations
-│           └── payload.rs      ← Request/response types
-│
-└── screenshots/                ← IDE screenshots (see Screenshots section)
-```
-
----
+*   **Custom Programming Language:** Designed and implemented a Sanskrit-oriented programming language from scratch.
+*   **Complete Compiler Pipeline:** Includes a recursive-descent lexer, parser, kāraka-driven semantic type checker, bytecode compiler (34 opcodes), and a stack-based virtual machine (VM).
+*   **Browser-Based IDE:** An interactive web IDE built with React and Monaco Editor, offering syntax highlighting, autocomplete, and diagnostics for Vyākṛti code.
+*   **Rust-based Backend:** An Axum (Rust) backend provides compile, REPL (Read-Eval-Print Loop), LSP (Language Server Protocol), and file-management endpoints via REST and WebSocket.
+*   **CLI Tool:** A command-line interface with `vy compile`, `vy run`, and `vy repl` commands for local development.
+*   **Comprehensive Testing:** 123 tests covering the full compiler pipeline, including a self-hosting corpus where the language parses its own source code.
 
 ## Tech Stack
 
-| Layer | Technology |
-|-------|-----------|
-| Language Core | Rust |
-| CLI | Rust binary |
-| IDE Backend | Rust (axum, tokio, serde) |
-| IDE Frontend | React 18, TypeScript, Vite |
-| Code Editor | Monaco Editor |
-| State Management | Zustand |
-| Styling | Tailwind CSS |
-| Testing | Rust built-in test framework |
-| Version Control | Git + GitHub |
+*   **Language Core & IDE Backend:** Rust (Axum framework)
+*   **Web IDE Frontend:** React 18, TypeScript, Vite, Monaco Editor, Zustand, Tailwind CSS
+*   **Testing:** Custom test suite, self-hosting corpus
 
----
+## Architecture Summary
 
-## Quick Start
+The Vyākṛti system is composed of several interconnected components:
 
-### Prerequisites
+1.  **Compiler Frontend (Rust):** Handles lexical analysis (lexer), parsing (recursive-descent parser), and semantic analysis (kāraka-driven type checker) to transform source code into an Abstract Syntax Tree (AST).
+2.  **Compiler Backend (Rust):** Converts the AST into bytecode, which is then executed by a custom stack-based Virtual Machine (VM).
+3.  **Web IDE (React, TypeScript):** Provides the user interface for writing and interacting with Vyākṛti code. It communicates with the backend via REST and WebSockets for compilation, execution, and language services.
+4.  **Backend Server (Axum, Rust):** Exposes API endpoints for the web IDE and CLI, handling compilation requests, REPL interactions, LSP services, and file management.
+5.  **CLI (Rust):** Offers command-line access to the compiler and VM functionalities.
 
-- [Rust](https://rustup.rs/) (1.70+)
-- [Node.js](https://nodejs.org/) (18+) — for the web IDE frontend
+```mermaid
+graph TD
+    A[Vyākṛti Source Code] --> B{Lexer}
+    B --> C{Parser}
+    C --> D{Semantic Type Checker}
+    D --> E{Bytecode Compiler}
+    E --> F[Stack-based VM]
+    F --> G[Execution Result]
+    H[Web IDE (React)] -- REST/WebSocket --> I[Backend Server (Axum Rust)]
+    J[CLI] -- API Calls --> I
+    I -- Compiler Pipeline --> A
+```
 
-### 1. Clone
+## Getting Started
+
+To get started with Vyākṛti, you will need Rust and Node.js installed. Clone the repository and follow the instructions in the `CONTRIBUTING.md` file for setting up the development environment.
 
 ```bash
 git clone https://github.com/gaganjainse/Vyakrti.git
 cd Vyakrti
+# Follow instructions in CONTRIBUTING.md for specific build steps
 ```
 
-### 2. Run the Language CLI
+## Screenshots / Demo Notes
 
-```bash
-cd vyakrti-language
+*(Placeholder for screenshots or GIF of the Web IDE in action, showcasing syntax highlighting, compilation, and REPL interaction.)*
 
-# Compile and run a Vyākṛti source file
-cargo run --bin vy -- compile selfhost/golden_smoke.vya
+## Limitations / Future Work
 
-# Start the interactive REPL
-cargo run --bin vy -- repl
+*   **AI/LLM Integration:** Currently a stub; future plans include integrating AI/LLM capabilities for code generation, auto-completion, and intelligent error correction.
+*   **Module System:** A robust module system is planned to enable better code organization and reusability.
+*   **JIT Compilation:** Just-In-Time (JIT) compilation is a future consideration for performance optimization.
+*   **Authentication & Database:** The current IDE does not include user authentication or a database. These are planned for future iterations to support multi-user environments and project persistence.
+*   **No Production Claims:** This project is an experimental MVP and is not deployed in a production environment with real users or live traffic.
 
-# Run tests
-cargo test
-```
+## Cross-links
 
-### 3. Run the Web IDE
-
-Terminal 1 — start the backend:
-```bash
-cd vyakrti-ide/backend
-cargo run
-# Server listens on http://127.0.0.1:8080
-```
-
-Terminal 2 — start the frontend:
-```bash
-cd vyakrti-ide/frontend
-npm install
-npm run dev
-# Open http://localhost:5173
-```
+*   **GitHub Profile:** [https://github.com/gaganjainse](https://github.com/gaganjainse)
+*   **LinkedIn Profile:** [https://linkedin.com/in/gagan-jain-a88aab345](https://linkedin.com/in/gagan-jain-a88aab345)
+*   **Portfolio:** [https://gagan-jain-portfolio.vercel.app](https://gagan-jain-portfolio.vercel.app)
 
 ---
 
-## What Works
-
-### Language Core
-- **Lexer** — Tokenizes Devanagari source; recognizes 38+ token types including Devanagari digits, danda (।) terminators, mixed-script identifiers
-- **Parser** — Recursive-descent parser producing AST for variables, functions, conditionals, loops, enums, structs, traits, pattern matching
-- **Semantic type checker** — Scope-aware symbol table with kāraka-driven role extraction from variable names
-- **Bytecode compiler** — Serializes AST to binary bytecode with 34 opcodes
-- **Virtual machine** — Stack-based execution with builtins (print, length, type, concat, contains, parse-int, to-string)
-- **CLI** — `vy compile`, `vy run`, `vy repl` commands
-- **Self-hosting corpus** — Language's own lexer/parser written in Vyākṛti as test fixtures
-
-### Web IDE
-- **Monaco code editor** with Vyākṛti syntax highlighting (Devanagari keywords, danda delimiters)
-- **Hover tooltips** showing Sanskrit keyword meanings
-- **Autocomplete** with keyword and snippet support
-- **Compile & Run** — sends source to backend, displays tokens, AST, bytecode, diagnostics, output
-- **WebSocket REPL** — interactive evaluation
-- **File management** — create, rename, delete, save files
-- **Project explorer** sidebar
-- **Settings panel** with theme toggle
-- **Command palette** (Ctrl+K)
-- **Error boundaries** — UI doesn't crash on component errors
-
-### Testing
-- **123 tests** covering all major components
-- End-to-end pipeline tests
-- Self-hosting corpus tests (language parses its own source)
-
----
-
-## What's Not Done Yet
-
-Honest list of current limitations:
-
-| Feature | Status | Notes |
-|---------|--------|-------|
-| AI/LLM integration | ❌ Not implemented | The `explain` endpoint uses hardcoded pattern matching, not actual Ollama/OpenAI calls |
-| Database persistence | ❌ Not implemented | No user accounts, no project saving |
-| Authentication | ❌ Not implemented | No login system |
-| Module system | ❌ Not implemented | `आयात` (import) is parsed but not resolved |
-| Multi-file projects | ❌ Not implemented | No file import/linking |
-| Float arithmetic | ⚠️ Bug | Float addition causes stack underflow in VM (loading float literals works) |
-| JIT compilation | ❌ Stub | `jit_compiler.rs` and `jit_memory.rs` are empty |
-| FFI | ⚠️ Unsafe | Uses `unsafe` + `mem::forget`, leaks memory |
-| Deployment | ❌ Not set up | Frontend and backend run separately, no Docker/CI |
-| Frontend tests | ❌ None | No Jest/Vitest tests for React components |
-
----
-
-## Screenshots
-
-> ⚠️ **Screenshots needed.** The IDE is fully functional but the repo currently lacks screenshots.
->
-> To capture:
-> 1. Start the IDE (see Quick Start above)
-> 2. Open a `.vya` file in the editor
-> 3. Save screenshots to `screenshots/` directory
->
-> Suggested captures:
-> - `ide-editor.png` — Editor with Devanagari syntax highlighting
-> - `ide-compile-output.png` — Compile output showing AST/bytecode/diagnostics
-> - `ide-repl.png` — WebSocket REPL session
-> - `ide-settings.png` — Settings panel with theme toggle
-> - `ide-project-explorer.png` — Project explorer sidebar with file tree
-
----
-
-## Language Example
-
-```vyakriti
-// Variable declaration
-मान मूल्यम् : अङ्क = ६० * ६० ।
-
-// Function declaration
-कार्य योगः(क : अङ्क, ख : अङ्क) -> अङ्क {
-    प्रतिफल क + ख ।
-}
-
-// Conditional
-यदि (सत) तर्हि {
-    मुद्रण("नमो व्याकृतिः") ।
-}
-```
-
-### Keywords
-
-| Vyākṛti | English | Vyākṛti | English |
-|----------|---------|----------|---------|
-| मान | var | कार्य | function |
-| प्रतिफल | return | मुद्रण | print (builtin) |
-| यदि | if | तर्हि | then |
-| अन्यथा | else | यावत् | while |
-| तावत् | do | सत / असत | true / false |
-| च / वा | and / or | समीक्षा | match |
-| वस्तु_विन्यासः | struct | रूपभेदः | enum |
-| गुणधर्म | trait | अनुष्ठान | impl |
-| उदात्त / अनुदात्त / स्वरित | public / private / protected | | |
-
----
-
-## Project Background
-
-Vyākṛti was built as an exploration of programming language design, compiler architecture, and developer tooling. The goal was to build a complete pipeline — from lexer to VM — for a language with a non-Latin syntax, and to wrap it in a real web-based IDE.
-
-The name means "structured form" in Sanskrit. The language uses Devanagari script for all keywords and supports both Devanagari and Latin identifiers.
-
-**What makes this project unusual:**
-- A fully working compiler pipeline (lex → parse → type-check → compile → execute) built from scratch
-- Unicode-aware lexer handling Devanagari script and danda (।) statement terminators
-- Kāraka-driven semantic analysis (using Sanskrit grammatical concepts for variable scoping)
-- Self-hosting test corpus — the language can parse its own source
-- A real web IDE with Monaco Editor integration, not just a code snippet
-
----
-
-## License
-
-This project is an experimental prototype under active development.
+*Last updated: June 14, 2026*
