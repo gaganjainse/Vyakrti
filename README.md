@@ -70,7 +70,7 @@ cd Vyakrti
 
 *   **GitHub Profile:** [https://github.com/gaganjainse](https://github.com/gaganjainse)
 *   **LinkedIn Profile:** [https://linkedin.com/in/gaganjainse](https://linkedin.com/in/gaganjainse)
-*   **Portfolio:** [https://gagan-jain-portfolio.vercel.app](https://gagan-jain-portfolio.vercel.app)
+*   **Portfolio:** [https://gaganjain.vercel.app](https://gaganjain.vercel.app)
 
 ---
 
