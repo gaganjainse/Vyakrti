@@ -54,7 +54,18 @@ fn normalize_relative(path: &str) -> Result<PathBuf, String> {
     // Normalize backslashes to forward slashes for consistent cross-platform handling
     let normalized_path = path.replace('\\', "/");
     let raw = Path::new(&normalized_path);
-    
+
+    // Reject Windows drive-letter paths (C:\... / C:/...) on every platform.
+    // On Unix hosts `C:/secret.vya` is merely a relative path, but it is an
+    // absolute path in the Windows path model — a workspace boundary guard
+    // must not let it resolve inside the workspace on any OS.
+    if normalized_path.len() >= 2
+        && normalized_path.as_bytes()[0].is_ascii_alphabetic()
+        && normalized_path.as_bytes()[1] == b':'
+    {
+        return Err("absolute paths are not allowed".into());
+    }
+
     if raw.is_absolute() {
         return Err("absolute paths are not allowed".into());
     }
