@@ -13,7 +13,7 @@ Vyākṛti aims to provide a unique programming experience by integrating Sanskr
 *   **Browser-Based IDE:** An interactive web IDE built with React and Monaco Editor, offering syntax highlighting, autocomplete, and diagnostics for Vyākṛti code.
 *   **Rust-based Backend:** An Axum (Rust) backend provides compile, REPL (Read-Eval-Print Loop), LSP (Language Server Protocol), and file-management endpoints via REST and WebSocket.
 *   **CLI Tool:** A command-line interface with `vy compile`, `vy run`, and `vy repl` commands for local development.
-*   **Comprehensive Testing:** 123 tests covering the full compiler pipeline, including a self-hosting corpus where the language parses its own source code.
+*   **Comprehensive Testing:** 122 tests covering the full compiler pipeline, including a self-hosting corpus where the language parses its own source code.
 
 ## Tech Stack
 
