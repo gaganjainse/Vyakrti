@@ -10,8 +10,6 @@ pub mod optimizer;
 pub mod borrow_checker;
 pub mod exhaustiveness;
 pub mod compiler;
-pub mod jit_memory;
-pub mod jit_compiler;
 pub mod vm;
 pub mod disassembler;
 
