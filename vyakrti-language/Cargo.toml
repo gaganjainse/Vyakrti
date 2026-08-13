@@ -16,3 +16,10 @@ winapi = { version = "0.3", features = ["memoryapi", "winnt"] }
 
 [target.'cfg(unix)'.dependencies]
 libc = "0.2"
+
+[dev-dependencies]
+criterion = "0.8"
+
+[[bench]]
+name = "compiler_pipeline"
+harness = false
