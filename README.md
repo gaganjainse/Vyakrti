@@ -4,7 +4,7 @@
 > (lexer → parser → kāraka-driven type checker → bytecode + VM) and a browser IDE.
 > An experimental MVP — not a production deployment.
 
-![Rust](https://img.shields.io/badge/Rust-orange?logo=rust) ![License](https://img.shields.io/badge/License-GPL--3.0--or--later-blue) ![Tests](https://img.shields.io/badge/Tests-122-success) ![CI](https://github.com/gaganjainse/Vyakrti/actions/workflows/rust.yml/badge.svg)
+![Rust](https://img.shields.io/badge/Rust-orange?logo=rust) ![License](https://img.shields.io/badge/License-GPL--3.0--or--later-blue) ![Tests](https://img.shields.io/badge/Tests-127-success) ![CI](https://github.com/gaganjainse/Vyakrti/actions/workflows/rust.yml/badge.svg)
 
 - **License:** GPL-3.0-or-later
 - **Owner:** Gagan Jain ([@gaganjainse](https://github.com/gaganjainse))
@@ -25,13 +25,13 @@ pipeline.
 - **Browser IDE** — React + Monaco with syntax highlighting, autocomplete, diagnostics
 - **Rust backend** — Axum: compile, REPL, LSP, file management via REST + WebSocket
 - **CLI** — `vy compile`, `vy run`, `vy repl`
-- **Testing** — 122 tests incl. a self-hosting corpus
+- **Testing** — 127 tests incl. a self-hosting corpus
 
 ## Quick start
 
 ```bash
 cargo build --release
-cargo test             # 122 tests
+cargo test             # 127 tests
 vy run examples/hello.vya
 ```
 
