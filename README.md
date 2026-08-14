@@ -1,5 +1,9 @@
 # Vyākṛti: A Sanskrit-oriented Programming Language and Web IDE
 
+![Rust](https://img.shields.io/badge/Rust-important?style=for-the-badge&logo=rust)
+![License](https://img.shields.io/badge/License-MIT-blue?style=for-the-badge)
+![Tests](https://img.shields.io/badge/Tests-122-success?style=for-the-badge)
+
 Vyākṛti is an ambitious engineering project exploring programming language design, developer tooling, web IDE architecture, and AI-assisted workflows. It is an experimental Sanskrit-oriented programming language with a complete compiler pipeline and a browser-based Integrated Development Environment (IDE).
 
 ## Overview
