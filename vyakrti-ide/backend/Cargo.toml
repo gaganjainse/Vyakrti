@@ -2,6 +2,7 @@
 name = "vyakrti-ide-backend"
 version = "0.2.0"
 edition = "2021"
+license = "GPL-3.0-or-later"
 
 [dependencies]
 axum = { version = "0.7", features = ["ws"] }
@@ -10,4 +11,4 @@ serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
 tower-http = { version = "0.5", features = ["cors"] }
 futures = "0.3"
-vyakriti = { path = "../../vyakrti-language" }
+vyakriti = { path = "../../vyakrti-language", version = "2026.1.0" }
