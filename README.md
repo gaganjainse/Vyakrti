@@ -4,7 +4,7 @@
 > (lexer → parser → kāraka-driven type checker → bytecode + VM) and a browser IDE.
 > An experimental MVP — not a production deployment.
 
-![Rust](https://img.shields.io/badge/Rust-orange?style=for-the-badge&logo=rust) ![License](https://img.shields.io/badge/License-GPL--3.0--or--later-blue?style=for-the-badge) ![Tests](https://img.shields.io/badge/Tests-122-success?style=for-the-badge) ![CI](https://img.shields.io/github/actions/workflow/status/gaganjainse/Vyakrti/rust.yml?style=for-the-badge&label=CI)
+![Rust](https://img.shields.io/badge/Rust-orange?logo=rust) ![License](https://img.shields.io/badge/License-GPL--3.0--or--later-blue) ![Tests](https://img.shields.io/badge/Tests-122-success) ![CI](https://github.com/gaganjainse/Vyakrti/actions/workflows/rust.yml/badge.svg)
 
 - **License:** GPL-3.0-or-later
 - **Owner:** Gagan Jain ([@gaganjainse](https://github.com/gaganjainse))
