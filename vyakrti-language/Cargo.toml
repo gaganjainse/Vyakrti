@@ -10,7 +10,7 @@ name = "vy"
 path = "src/bin/vy.rs"
 
 [dependencies]
-libloading = "0.8"
+libloading = "0.9"
 
 [target.'cfg(windows)'.dependencies]
 winapi = { version = "0.3", features = ["memoryapi", "winnt"] }
