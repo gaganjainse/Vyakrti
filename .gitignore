@@ -21,7 +21,7 @@ desktop.ini
 
 # --- Rust (vyakrti-language + vyakrti-ide/backend) ---
 target/
-Cargo.lock
+# Cargo.lock IS committed — this is a binary project (reproducible builds)
 **/*.rs.bk
 *.pdb
 *.exe
