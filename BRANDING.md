@@ -37,10 +37,10 @@ The `.vya` extension is reserved for source code that:
 3. Compiles and executes on the Vyākṛti compiler/VM
 
 ### Licensing
-All `.vya` files created for the Vyākṛti project are subject to the **Apache License 2.0** (see LICENSE file).
+All `.vya` files created for the Vyākṛti project are subject to the **GNU General Public License v3 or later (GPL-3.0-or-later)** (see LICENSE file).
 
 When distributing `.vya` files:
-- Include the full Apache License 2.0 text in any derivative work
+- Include the full GPL-3.0 text in any derivative work
 - Retain copyright notices from the original `.vya` file
 - If modified, clearly mark the changes
 - Comply with all terms in Section 4 (Redistribution) of the Apache License
@@ -49,7 +49,7 @@ When distributing `.vya` files:
 ```
 // Vyākṛti Source Code
 // Copyright [YEAR] [AUTHOR]
-// Licensed under the Apache License, Version 2.0
+// Licensed under GPL-3.0-or-later
 // See https://github.com/gaganjainse/Vyakrti/blob/main/LICENSE
 ```
 
@@ -57,7 +57,7 @@ Example:
 ```
 // Vyākṛti Source Code
 // Copyright 2026 Gagan Jain
-// Licensed under the Apache License, Version 2.0
+// Licensed under GPL-3.0-or-later
 // See https://github.com/gaganjainse/Vyakrti/blob/main/LICENSE
 
 मान परिणामः : अङ्क = १० ।
@@ -95,7 +95,7 @@ myscript.custom-vya  ← Custom variant
 ## Official Resources
 
 - **GitHub Repository:** https://github.com/gaganjainse/Vyakrti
-- **License:** Apache License 2.0 (full text in LICENSE file)
+- **License:** GPL-3.0-or-later (full text in LICENSE file)
 - **Documentation:** README.md in the project root
 - **Language Specification:** See README.md (Keywords section) and examples
 
@@ -109,4 +109,4 @@ For questions about Vyākṛti branding, the .vya extension, or licensing, pleas
 
 ## Legal Disclaimer
 
-This branding policy is provided as documentation of the creator's intent to maintain clarity and prevent confusion around the Vyākṛti project. While Apache License 2.0 permits derivative works, trademark and branding considerations apply separately. The `.vya` extension is used as an identifier for official Vyākṛti source code under the Apache License 2.0.
+This branding policy is provided as documentation of the creator's intent to maintain clarity and prevent confusion around the Vyākṛti project. While Apache License 2.0 permits derivative works, trademark and branding considerations apply separately. The `.vya` extension is used as an identifier for official Vyākṛti source code under GPL-3.0-or-later.
